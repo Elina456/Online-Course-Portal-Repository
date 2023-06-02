@@ -42,7 +42,7 @@ namespace Online_Course_Portal_Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(CourseBooking course)
+        public async Task<IActionResult> CreateBooking(CourseBookingDTO course)
         {
             if (ModelState.IsValid)
             {
@@ -69,6 +69,8 @@ namespace Online_Course_Portal_Web.Controllers
         public async Task<IActionResult> DeleteBooking(int id)
         {
             await _courseBookingService.DeleteCourseAsync(id);
+            TempData["success"] = "Course UnEnrolled Successfully";
+
             return RedirectToAction(nameof(Index));
         }
 

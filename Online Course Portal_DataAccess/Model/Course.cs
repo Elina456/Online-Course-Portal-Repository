@@ -20,7 +20,8 @@ namespace Online_Course_Portal_DataAccess.Model
         public string courseName { get; set; }
 
         [Required(ErrorMessage = "Course Description is required.")]
-        [Column(TypeName = "varchar(max)")]
+        [MaxLength(100, ErrorMessage = "Course Description cannot exceed 100 characters.")]
+        [Column(TypeName = "varchar(100)")]
         [Display(Name = "Course Description")]
         public string courseDescription { get; set; }
         [Required(ErrorMessage = "Start Date is required.")]

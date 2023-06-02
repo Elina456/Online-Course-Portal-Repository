@@ -23,6 +23,7 @@ namespace Online_Course_Portal_Web.Controllers
             try
             {
                 await _adminService.CourseApproved(id);
+                TempData["success"] = "Course Approved Successfully";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -38,6 +39,7 @@ namespace Online_Course_Portal_Web.Controllers
             try
             {
                 await _adminService.CourseRejected(id);
+                TempData["success"] = "Course Rejected Successfully";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

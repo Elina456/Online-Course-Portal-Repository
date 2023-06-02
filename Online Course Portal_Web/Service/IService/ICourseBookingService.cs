@@ -7,7 +7,7 @@ namespace Online_Course_Portal_Web.Service.IService
     {
         Task<IEnumerable<CourseBooking>> GetAllAsync();
         Task<CourseBooking> GetByIdAsync(int id);
-        Task<CourseBooking> CreateCourseAsync(CourseBooking createDTO);
+        Task<CourseBooking> CreateCourseAsync(CourseBookingDTO createDTO);
         
         Task DeleteCourseAsync(int id);
     }

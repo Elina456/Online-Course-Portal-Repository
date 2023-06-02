@@ -91,7 +91,7 @@ namespace Online_Course_Portal_API.Controllers
 
         }
         [HttpPost]
-        public ActionResult<ApiResponse> CreateCourseBooking([FromBody] CourseBooking CourseBooking)
+        public ActionResult<ApiResponse> CreateCourseBooking([FromBody] CourseBookingDTO CourseBooking)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Online_Course_Portal_API.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var courseBooking = new CourseBooking
+                var courseBooking = new CourseBookingDTO
                 {
                     CourseId = CourseBooking.CourseId,
                     StudentName = CourseBooking.StudentName
@@ -118,9 +118,9 @@ namespace Online_Course_Portal_API.Controllers
 
                 };
 
-                //CourseBooking result = _mapper.Map<CourseBooking>(courseBooking);
+                CourseBooking result = _mapper.Map<CourseBooking>(courseBooking);
 
-                _bookingrepository.Add(courseBooking);
+                _bookingrepository.Add(result);
                 course.AvailableSeats--;
                 _courseRepository.update(course);
                 
@@ -136,7 +136,7 @@ namespace Online_Course_Portal_API.Controllers
                 _response.StatusCode = HttpStatusCode.OK;
 
 
-                return CreatedAtAction("GetCourseBooking", new { id = courseBooking.Id }, _response);
+                return CreatedAtAction("GetCourseBooking", new { id = result.Id }, _response);
                 
 
 

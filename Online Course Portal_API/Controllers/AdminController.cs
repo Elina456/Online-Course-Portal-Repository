@@ -32,7 +32,7 @@ namespace Online_Course_Portal_API.Controllers
                 }
 
             }
-            [HttpPut]
+            [HttpGet]
             public IActionResult CourseApproved(int id)
             {
                 if (id == 0)
@@ -50,7 +50,7 @@ namespace Online_Course_Portal_API.Controllers
                 _courseRepository.save();
                 return Ok(course);
             }
-            [HttpPut]
+            [HttpGet]
             public IActionResult CourseRejected(int id)
             {
                 if (id == 0)

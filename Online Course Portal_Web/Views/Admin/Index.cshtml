@@ -20,12 +20,12 @@
                     <td>@course.courseName</td>
                     <td>@course.AvailableSeats</td>
                     <td>
-                        <form asp-action="CourseApproved" method="post">
+                        <form asp-action="ApprovedCourse" method="post">
                            
                             <input type="hidden" name="id" value="@course.Id" />
                             <button type="submit">Approve</button>
                         </form>
-                        <form asp-action="CourseRejected" method="post">
+                        <form asp-action="RejectedCourse" method="post">
                             <input type="hidden" name="id" value="@course.Id" />
                             <button type="submit">Reject</button>
                         </form>

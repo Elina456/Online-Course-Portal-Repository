@@ -23,15 +23,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                       @* @if (User.IsInRole(SD.Role_Admin))*@
-                        
+                        @if (User.IsInRole(SD.Role_Admin))
+                        {
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Course</a>
                             </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Course Status Page</a>
-                        </li>
-                        
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Course Status Page</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CourseBooking" asp-action="Index">CourseBooking</a>
                         </li>
