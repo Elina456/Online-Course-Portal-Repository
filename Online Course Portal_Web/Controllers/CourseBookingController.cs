@@ -42,7 +42,7 @@ namespace Online_Course_Portal_Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(CourseBookingDTO course)
+        public async Task<IActionResult> CreateBooking(CourseBooking course)
         {
             if (ModelState.IsValid)
             {

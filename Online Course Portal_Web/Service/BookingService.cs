@@ -52,7 +52,7 @@ namespace Online_Course_Portal_Web.Service
             return null;
         }
 
-        public async Task<CourseBooking> CreateCourseAsync(CourseBookingDTO course)
+        public async Task<CourseBooking> CreateCourseAsync(CourseBooking course)
         {
             string json = JsonConvert.SerializeObject(course);
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
