@@ -15,6 +15,7 @@ namespace Online_Course_Portal_API.Controllers
 {
     [Route("api/Course")]
     [ApiController]
+    //[Authorize(Roles ="Admin")]
     
     public class CourseController : ControllerBase
     {

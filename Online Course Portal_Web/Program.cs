@@ -22,6 +22,7 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ICourseService, CourseService>();
 builder.Services.AddHttpClient<ICourseBookingService, BookingService>();
+builder.Services.AddHttpClient<IAdminService, AdminService>();
 
 builder.Services.AddRazorPages();
 
