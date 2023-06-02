@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Course>
+@using Online_Course_Portal_Web.Models
+@using Online_Course_Portal_DataAccess.Model
+
+
+
+<h2>Courses</h2>
+<div class="col text-end pt-1">
+    <a asp-controller="Course" asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>Create Course</a>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Course Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Model)
+            {
+                <tr>
+                    <td>@result.courseName</td>
+                    <td>@result.courseDescription</td>
+                    <td>@result.StartDate</td>
+                    <td>@result.EndDate</td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@result.Id">Edit</a> 
+                        <a asp-action="Delete" asp-route-id="@result.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Course available.</p>
+}

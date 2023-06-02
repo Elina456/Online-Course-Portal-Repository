@@ -1,0 +1,51 @@
+﻿@model CourseBooking
+using Online_Course_Portal_Web.Models
+@using Online_Course_Portal_DataAccess.Model
+<h1>Create Course Booking</h1>
+@{
+    var AvailableSeats = ViewData["a"];
+    var CourseName = ViewData["b"];
+    var enddate = ViewData["c"];
+    var startdate = ViewData["d"];
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" asp-action="CreateBooking">
+
+            <div class="form-group">
+                <label asp-for="Course.courseName"></label>
+                <input asp-for="Course.courseName" value="@CourseName" class="form-control" />
+                <span asp-validation-for="Course.courseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentName"></label>
+                <input asp-for="StudentName" value="@CourseName" class="form-control" />
+                <span asp-validation-for="StudentName" class="text-danger"></span>
+            </div>
+
+            
+
+            <div class="form-group">
+                <label asp-for="Course.StartDate"></label>
+                <input asp-for="Course.StartDate"  value="@startdate"type="date" class="form-control" />
+                <span asp-validation-for="Course.StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Course.EndDate"></label>
+                <input asp-for="Course.EndDate" value="@enddate" type="date" class="form-control" />
+                <span asp-validation-for="Course.EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Course.AvailableSeats"></label>
+                <input asp-for="Course.AvailableSeats"  value="@AvailableSeats" type="number" class="form-control" />
+                <span asp-validation-for="Course.AvailableSeats" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Course.Id" />
+            <button type="submit" class="btn btn-primary">Enroll</button>
+            <a asp-controller="CourseBooking" asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
