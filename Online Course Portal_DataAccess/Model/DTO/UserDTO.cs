@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Online_Course_Portal_DataAccess.Model.DTO
 {
-    public class LoginResponseDTO
+    public class UserDTO
     {
-        public UserDTO user { get; set; }
-        public string Token { get; set; }
-        
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string UserName { get; set; }
     }
 }

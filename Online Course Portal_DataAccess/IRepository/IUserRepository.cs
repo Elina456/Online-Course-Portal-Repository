@@ -12,7 +12,7 @@ namespace Online_Course_Portal_DataAccess.IRepository
     {
         bool IsUniqueUser(string userName);
         Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
-        Task<User> Register(UserCreateDTO userCreateDTO);
+        Task<UserDTO> Register(UserCreateDTO registrationRequestDTO);
         Task<User> UpdateAsync(User entity);
     }
 }

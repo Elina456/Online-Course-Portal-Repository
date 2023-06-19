@@ -16,8 +16,8 @@ namespace Online_Course_Portal_DataAccess.Model
        public int Id { get; set; }
        
 
-        [Column(TypeName = "varchar(50)")]
-        public string StudentName { get; set; }
+        //[Column(TypeName = "varchar(50)")]
+        //public string StudentName { get; set; }
         public int CourseId { get; set; }
         [ForeignKey("CourseId")]
         [Column(TypeName = "varchar(100)")]

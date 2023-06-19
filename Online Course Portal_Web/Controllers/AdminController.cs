@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Online_Course_Portal_Web.Service.IService;
 
 namespace Online_Course_Portal_Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService,IHttpContextAccessor contextAccessor)
         {
             _adminService = adminService;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-            var courses = await _adminService.GetAllAsync();
+            var courses = await _adminService.GetAllAsync(_contextAccessor.HttpContext.Session.GetString("JWTToken"));
             return View(courses);
         }
         [HttpPost]
@@ -22,7 +26,7 @@ namespace Online_Course_Portal_Web.Controllers
         {
             try
             {
-                await _adminService.CourseApproved(id);
+                await _adminService.CourseApproved(id, _contextAccessor.HttpContext.Session.GetString("JWTToken"));
                 TempData["success"] = "Course Approved Successfully";
                 return RedirectToAction("Index");
             }
@@ -38,7 +42,7 @@ namespace Online_Course_Portal_Web.Controllers
         {
             try
             {
-                await _adminService.CourseRejected(id);
+                await _adminService.CourseRejected(id, _contextAccessor.HttpContext.Session.GetString("JWTToken"));
                 TempData["success"] = "Course Rejected Successfully";
                 return RedirectToAction("Index");
             }

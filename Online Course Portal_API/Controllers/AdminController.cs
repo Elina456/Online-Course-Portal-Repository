@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Online_Course_Portal_DataAccess.IRepository;
 using Online_Course_Portal_DataAccess.Model;
 using System.Reflection.Metadata;
@@ -7,6 +8,7 @@ namespace Online_Course_Portal_API.Controllers
 {
     [Route("api/Admin/[action]")]
     [ApiController]
+    
     public class AdminController : Controller
     {
        
@@ -32,8 +34,15 @@ namespace Online_Course_Portal_API.Controllers
                 }
 
             }
+        [HttpGet]
+        public IActionResult GetAllApprovedCourse()
+        {
+            IEnumerable<Course> course = _courseRepository.GetAll(u => u.IsApproved == true);
+            return Ok(course);
+        }
             [HttpGet]
-            public IActionResult CourseApproved(int id)
+             [Authorize(Roles = "Admin")]
+        public IActionResult CourseApproved(int id)
             {
                 if (id == 0)
                 {
@@ -51,7 +60,8 @@ namespace Online_Course_Portal_API.Controllers
                 return Ok(course);
             }
             [HttpGet]
-            public IActionResult CourseRejected(int id)
+             [Authorize(Roles = "Admin")]
+        public IActionResult CourseRejected(int id)
             {
                 if (id == 0)
                 {

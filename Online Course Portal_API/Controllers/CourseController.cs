@@ -17,6 +17,7 @@ namespace Online_Course_Portal_API.Controllers
     [ApiController]
     
     
+    
     public class CourseController : ControllerBase
     {
         private readonly ICourseRepository _courseRepository;
@@ -90,6 +91,7 @@ namespace Online_Course_Portal_API.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult<ApiResponse> CreateCourse( [FromBody]CourseCreateDTO CourseDTO)
         {
             try
@@ -124,6 +126,7 @@ namespace Online_Course_Portal_API.Controllers
             return _response;
         }
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<ApiResponse> UpdateCourse(int id, [FromBody] Course course)
         {
             try
@@ -153,6 +156,7 @@ namespace Online_Course_Portal_API.Controllers
 
         }
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<ApiResponse> DeleteCourse(int id)
         {
             try

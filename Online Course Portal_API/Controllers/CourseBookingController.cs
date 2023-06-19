@@ -8,10 +8,12 @@ using Online_Course_Portal_DataAccess.IRepository;
 using Online_Course_Portal_DataAccess.Model.DTO;
 using Online_Course_Portal_DataAccess.Model;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Online_Course_Portal_API.Controllers
 {
     [Route("api/CourseBooking")]
+    [Authorize]
     [ApiController]
 
     public class CourseBookingController : ControllerBase
@@ -91,6 +93,7 @@ namespace Online_Course_Portal_API.Controllers
 
         }
         [HttpPost]
+        [Authorize]
         public ActionResult<ApiResponse> CreateCourseBooking([FromBody] CourseBookingDTO CourseBooking)
         {
             try
@@ -113,7 +116,7 @@ namespace Online_Course_Portal_API.Controllers
                 var courseBooking = new CourseBookingDTO
                 {
                     CourseId = CourseBooking.CourseId,
-                    StudentName = CourseBooking.StudentName
+                    //StudentName = CourseBooking.StudentName
 
 
                 };
@@ -151,6 +154,7 @@ namespace Online_Course_Portal_API.Controllers
         }
         
         [HttpDelete("{id:int}")]
+        [Authorize]
         public ActionResult<ApiResponse> DeleteCourseBooking(int id)
         {
             try
@@ -160,7 +164,7 @@ namespace Online_Course_Portal_API.Controllers
                     return BadRequest();
                 }
 
-                var booking = _bookingrepository.Get(u => u.Id == id);
+                var booking = _bookingrepository.Get(u => u.CourseId == id);
                 if (booking == null)
                 {
                     _response.IsSuccess = false;

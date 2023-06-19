@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Online_Course_Portal_DataAccess.Model;
 using Online_Course_Portal_DataAccess.Model.DTO;
@@ -9,20 +11,23 @@ using System.Reflection.Metadata;
 
 namespace Online_Course_Portal_Web.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class CourseController : Controller
     {
         
         private readonly ICourseService _courseService;
-        public CourseController(ICourseService courseService)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public CourseController(ICourseService courseService, IHttpContextAccessor contextAccessor)
         {
-            
+            _contextAccessor = contextAccessor;
             _courseService = courseService;
         }
 
 
             public async Task<IActionResult> Index()
             {
-                var posts = await _courseService.GetAllAsync();
+                
+                var posts = await _courseService.GetAllAsync(_contextAccessor.HttpContext.Session.GetString("JWTToken"));
                 return View(posts);
             }
         
@@ -36,7 +41,7 @@ namespace Online_Course_Portal_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _courseService.CreateCourseAsync(course);
+                var result = await _courseService.CreateCourseAsync(course, HttpContext.Session.GetString("JWTToken"));
                 TempData["success"] = "Course Created Successfully";
                 return RedirectToAction(nameof(Index), new { id = result.Id });
             }
@@ -46,7 +51,7 @@ namespace Online_Course_Portal_Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var course = await _courseService.GetByIdAsync(id);
+            var course = await _courseService.GetByIdAsync(id, HttpContext.Session.GetString("JWTToken"));
             return View(course);
         }
 
@@ -55,7 +60,7 @@ namespace Online_Course_Portal_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _courseService.UpdateCourseAsync(id, course);
+                await _courseService.UpdateCourseAsync(id, course, HttpContext.Session.GetString("JWTToken"));
                 TempData["success"] = "Course Updated Successfully";
                 return RedirectToAction(nameof(Index), new { id });
             }
@@ -65,7 +70,7 @@ namespace Online_Course_Portal_Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var course = await _courseService.GetByIdAsync(id);
+            var course = await _courseService.GetByIdAsync(id, HttpContext.Session.GetString("JWTToken"));
             return View(course);
         }
 
@@ -73,7 +78,7 @@ namespace Online_Course_Portal_Web.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteCourse(int id)
         {
-            await _courseService.DeleteCourseAsync(id);
+            await _courseService.DeleteCourseAsync(id,HttpContext.Session.GetString("JWTToken"));
             TempData["success"] = "Course Deleted Successfully";
             return RedirectToAction(nameof(Index));
         }

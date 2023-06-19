@@ -11,6 +11,10 @@ namespace Online_Course_Portal_API
             CreateMap<Course, CourseCreateDTO>().ReverseMap();
             CreateMap<User, UserCreateDTO>().ReverseMap();
             CreateMap<CourseBooking,CourseBookingDTO>().ReverseMap();
+            CreateMap<ApplicationUser, UserDTO>().ReverseMap();
+            CreateMap<UserDTO, UserCreateDTO>().ReverseMap();
+
+
         }
     }
 }

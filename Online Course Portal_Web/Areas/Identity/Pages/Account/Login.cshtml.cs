@@ -14,6 +14,14 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Newtonsoft.Json;
+using Online_Course_Portal_DataAccess.Model.DTO;
+using Online_Course_Portal_Web.Service;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Online_Course_Portal_DataAccess;
+using Online_Course_Portal_Web.Service.IService;
 
 namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
 {
@@ -21,11 +29,13 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IAuthService _authservice;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IAuthService authservice)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _authservice = authservice;
         }
 
         /// <summary>
@@ -103,18 +113,71 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+
             if (ModelState.IsValid)
             {
+                //var loginRequest = new LoginRequestDTO
+                //{
+                //    userName = Input.Email,
+                //    Password = Input.Password
+                //};
+                //var response = await _authservice.Login(loginRequest);
+               
+                //if (response.user == null || string.IsNullOrEmpty(response.Token))
+                //{
+                //    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                   
+                //}
+                
+                
+                    
+                    //var handler = new JwtSecurityTokenHandler();
+                    //var jwt = handler.ReadJwtToken(response.Token);
+
+                    //var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    //identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value));
+                    //identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+                    //var principal = new ClaimsPrincipal(identity);
+                    //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    //HttpContext.Session.SetString("JWTToken", response.Token);
+                    
+                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    var loginRequest = new LoginRequestDTO
+                    {
+                        userName = Input.Email,
+                        Password = Input.Password
+                    };
+                    var response = await _authservice.Login(loginRequest);
+
+                    if (response.user == null || string.IsNullOrEmpty(response.Token))
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+                    }
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwt = handler.ReadJwtToken(response.Token);
+
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    HttpContext.Session.SetString("JWTToken", response.Token);
+
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

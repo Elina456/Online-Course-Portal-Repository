@@ -11,8 +11,8 @@ namespace Online_Course_Portal_DataAccess.Model.DTO
 {
     public class CourseBookingDTO
     {
-        [Required]
-        public string StudentName { get; set; }
+        
+       // public string StudentName { get; set; }
         [Required]
         public int? CourseId { get; set; }
     }

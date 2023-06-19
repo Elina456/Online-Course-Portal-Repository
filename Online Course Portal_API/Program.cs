@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -6,6 +7,7 @@ using Online_Course_Portal_API;
 using Online_Course_Portal_DataAccess;
 using Online_Course_Portal_DataAccess.Data;
 using Online_Course_Portal_DataAccess.IRepository;
+using Online_Course_Portal_DataAccess.Model;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,8 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICourseBookingRepository, CourseBookingRepository>();
+//Configuring security we have add identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 

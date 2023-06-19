@@ -4,6 +4,8 @@ using Online_Course_Portal_DataAccess.Model;
 using Online_Course_Portal_DataAccess;
 using Online_Course_Portal_Web.Service.IService;
 using System.Text;
+using AutoMapper.Internal;
+using System.Net.Http.Headers;
 
 namespace Online_Course_Portal_Web.Service
 {
@@ -17,8 +19,13 @@ namespace Online_Course_Portal_Web.Service
             _httpClient.BaseAddress = new Uri(Baseurl);
 
         }
-        public async Task<IEnumerable<CourseBooking>> GetAllAsync()
+        public async Task<IEnumerable<CourseBooking>> GetAllAsync(string token)
         {
+            
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             HttpResponseMessage response = await _httpClient.GetAsync("/api/CourseBooking/");
             response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync();
@@ -35,8 +42,13 @@ namespace Online_Course_Portal_Web.Service
         }
 
 
-        public async Task<CourseBooking> GetByIdAsync(int courseId)
+        public async Task<CourseBooking> GetByIdAsync(int courseId, string token)
         {
+            
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             HttpResponseMessage response = await _httpClient.GetAsync($"/api/CourseBooking/{courseId}");
             response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync();
@@ -52,10 +64,16 @@ namespace Online_Course_Portal_Web.Service
             return null;
         }
 
-        public async Task<CourseBooking> CreateCourseAsync(CourseBooking course)
+
+        public async Task<CourseBooking> CreateCourseAsync(CourseBookingDTO course, string token)
         {
+            
             string json = JsonConvert.SerializeObject(course);
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
 
             HttpResponseMessage response = await _httpClient.PostAsync("/api/CourseBooking/", content);
             response.EnsureSuccessStatusCode();
@@ -74,8 +92,13 @@ namespace Online_Course_Portal_Web.Service
 
         
 
-        public async Task DeleteCourseAsync(int id)
+        public async Task DeleteCourseAsync(int id, string token)
         {
+            
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             HttpResponseMessage response = await _httpClient.DeleteAsync($"/api/CourseBooking/{id}");
             response.EnsureSuccessStatusCode();
         }

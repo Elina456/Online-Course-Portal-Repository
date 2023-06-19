@@ -18,25 +18,41 @@
                 <th>Course Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>AvailableSeats</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var result in Model)
             {
-                <tr>
-                    <td>@result.courseName</td>
+
+                Html.RenderPartial("_CoursePartial", result);
+
+               <tr>
+                <td>
+                <a asp-action="Edit" asp-route-id="@result.Id">Edit</a>
+                <a asp-action="Delete" asp-route-id="@result.Id">Delete</a>
+                </td>
+               </tr>
+                
+                
+                
+                @*<tr>*@
+                    @*<td>@result.courseName</td>
                     <td>@result.courseDescription</td>
                     <td>@result.StartDate</td>
                     <td>@result.EndDate</td>
+                    <td>@result.AvailableSeats</td>
+                    Html.RenderPartial("_CoursePartial",result);*@
 
-                    <td>
+                    @*<td>
                         <a asp-action="Edit" asp-route-id="@result.Id">Edit</a> 
                         <a asp-action="Delete" asp-route-id="@result.Id">Delete</a>
                     </td>
-                </tr>
+                </tr>*@
             }
         </tbody>
     </table>
+    @await Component.InvokeAsync("CountDown")
 }
 else
 {

@@ -6,10 +6,10 @@ namespace Online_Course_Portal_Web.Service.IService
 {
     public interface ICourseService
     {
-        Task <IEnumerable<Course>> GetAllAsync();
-        Task<Course> GetByIdAsync(int id);
-        Task<Course> CreateCourseAsync(CourseCreateDTO createDTO );
-        Task<Course> UpdateCourseAsync(int id, Course course);
-        Task DeleteCourseAsync(int id);
+        Task <IEnumerable<Course>> GetAllAsync(string token);
+        Task<Course> GetByIdAsync(int id,string token);
+        Task<Course> CreateCourseAsync(CourseCreateDTO createDTO, string token );
+        Task<Course> UpdateCourseAsync(int id, Course course,string token);
+        Task DeleteCourseAsync(int id, string token);
     }
 }

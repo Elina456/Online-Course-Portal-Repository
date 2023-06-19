@@ -26,6 +26,7 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
+            HttpContext.Session.SetString("JWTToken","");
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {

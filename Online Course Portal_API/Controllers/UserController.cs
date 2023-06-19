@@ -64,6 +64,7 @@ namespace Online_Course_Portal_API.Controllers
             }
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
+            _response.Result = user;
             return Ok(_response);
 
         }

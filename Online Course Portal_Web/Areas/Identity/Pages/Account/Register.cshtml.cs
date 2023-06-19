@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Online_Course_Portal_DataAccess.Model;
+using Online_Course_Portal_DataAccess.Model.DTO;
+using Online_Course_Portal_Web.Service.IService;
 using OnlineCoursePortal.Utility;
 
 namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
@@ -34,6 +36,7 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IAuthService _authservice;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -41,11 +44,12 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,IAuthService authService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _userStore = userStore;
+            _authservice = authService;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
@@ -143,6 +147,18 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+
+                //var registerRequest = new UserCreateDTO
+                //{
+                //    UserName = Input.Email,
+                //    Password = Input.Password,
+                //    Name = Input.Name,
+                //    Role = Input.Role
+                //};
+
+                //var response = await _authservice.Register(registerRequest);
+
+
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -151,9 +167,10 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
                 user.State = Input.State;
                 user.Name = Input.Name;
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
+               
                 if (result.Succeeded)
                 {
+                    
                     _logger.LogInformation("User created a new account with password.");
                     if (!String.IsNullOrEmpty(Input.Role))
                     {
@@ -200,6 +217,7 @@ namespace Online_Course_Portal_Web.Areas.Identity.Pages.Account
         {
             try
             {
+
                 return Activator.CreateInstance<ApplicationUser>();
             }
             catch

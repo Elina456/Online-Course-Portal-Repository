@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Online_Course_Portal_DataAccess.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using OnlineCoursePortal.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ICourseService, CourseService>();
 builder.Services.AddHttpClient<ICourseBookingService, BookingService>();
 builder.Services.AddHttpClient<IAdminService, AdminService>();
+builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
+    AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.SlidingExpiration = true;
+    });
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+
+});
+
+
 
 builder.Services.AddRazorPages();
 
@@ -43,7 +65,7 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

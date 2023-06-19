@@ -2,6 +2,7 @@
 using Online_Course_Portal_DataAccess.Model;
 using Online_Course_Portal_Web.Service.IService;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace Online_Course_Portal_Web.Service
 {
@@ -16,17 +17,39 @@ namespace Online_Course_Portal_Web.Service
             _httpClient.BaseAddress = new Uri(BaseUrl);
            
         }
-        public async Task<IEnumerable<Course>> GetAllAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync(string token)
         {
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             HttpResponseMessage response = await _httpClient.GetAsync("/api/Admin/GetAllCourses");
             response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync();
             IEnumerable<Course> course = JsonConvert.DeserializeObject<IEnumerable<Course>>(content);
             return course;
         }
-
-        public async Task<bool> CourseApproved(int id)
+        public async  Task<IEnumerable<Course>> GetAllApproveCourseAsync(string token)
         {
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+    HttpResponseMessage response = await  _httpClient.GetAsync("/api/Admin/GetAllApprovedCourse");
+    response.EnsureSuccessStatusCode();
+            string content =  await response.Content.ReadAsStringAsync();
+    IEnumerable<Course> course = JsonConvert.DeserializeObject<IEnumerable<Course>>(content);
+            return course;
+
+        }
+
+public async Task<bool> CourseApproved(int id, string token)
+        {
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
             var response = await _httpClient.GetAsync($"api/Admin/CourseApproved?id={id}");
             if (response.IsSuccessStatusCode)
             {
@@ -42,8 +65,12 @@ namespace Online_Course_Portal_Web.Service
             }
         }
 
-        public async Task<bool> CourseRejected(int id)
+        public async Task<bool> CourseRejected(int id, string token)
         {
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             var response = await _httpClient.GetAsync($"api/Admin/CourseRejected?id={id}");
             if (response.IsSuccessStatusCode)
             {
@@ -59,5 +86,7 @@ namespace Online_Course_Portal_Web.Service
             }
 
         }
+
+        
     }
 }
